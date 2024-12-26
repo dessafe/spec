@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 120px; /*Location of the box modal*/
+    padding-bottom: 20px;
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin-left: 550px;
+    bottom: 10px;
+    border-radius: 40px;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+
+  /* .modal::-webkit-scrollbar {
+    display: none;
+  }
+   */
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {bottom:-300px; opacity:0}
+    to {bottom:10px; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {bottom:-300px; opacity:0}
+    to {bottom:10px; opacity:1}
+  }      
+
+.hardware-form {
+    padding: 35px;
+}
+
+@media (max-width: 500px) {
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 120px; /*Location of the box modal*/
+        padding-bottom: 20px;
+        /* left: 0; */
+        top: 0;
+        right: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4); 
+      }
+}

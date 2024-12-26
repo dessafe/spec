@@ -1,0 +1,41 @@
+:root {
+	--poppins: 'Poppins', sans-serif;
+	--lato: 'Lato', sans-serif;
+
+	--light: #F9F9F9;
+	--blue: #3C91E6;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #342E37;
+	--red: #dd423d;
+	--light-red: #f79d99;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+	--green: #5cb85c;
+	--light-green: #b0e3b0;
+}
+
+
+.table {
+    /* display: flex;
+	flex-wrap: wrap;
+	grid-gap: 24px;
+	margin-top: 24px; */
+	width: 100%;
+	color: var(--dark);
+    background-color: var(--light);
+    border-radius: 20px;
+	padding: 24px;
+	overflow-x: auto;
+}
+
+/* th {
+    border: none;
+} */
+
+td {
+    border: none;
+}
