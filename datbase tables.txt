@@ -24,8 +24,11 @@ passw - varchar(30)
 
 table: laboratory
 labID - int (50) auto_Inc - PK
+idno - varchar(50) faculty table - FK
 labname - varchar(20)
 labLoc - varchar(50)
+labStatus - varchar(50)
+depLocation - varchar (50)
 
 table: lab_images
 imageID - INT AUTO_INCREMENT PK
@@ -43,7 +46,7 @@ serialNo - varchar (100)
 doAcquisition - date
 status - varchar(20)
 idno - varchar(50) FK faculty table ON CASCADE
-labId - int (50) - PK ON CASCADE
+labId - int (50) - FK ON CASCADE
 
 table: hardware_images
 imageID INT AUTO_INCREMENT PRIMARY KEY
