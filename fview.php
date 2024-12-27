@@ -112,16 +112,6 @@ include "db_connection.php";
 				<div class="left">
 					<h1>Faculties</h1>
 				</div>
-				<div class="right">
-					<!-- <button id="myBtn" class="btn-download" style="border: none; margin-right: 10px">
-						<i class='bx bx-plus'></i>
-						<span class="text">Create Faculty</span> 
-					</button>
-                    <button id="myBtn2" class="btn-download" style="border: none;">
-						<i class='bx bx-plus'></i>
-						<span class="text">Create Laboratory</span> 
-					</button> -->
-                </div>
 			</div>
 
             <?php
@@ -152,24 +142,29 @@ if ($result) {
             </thead>
             <tbody>';
 
-        while ($row = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo '<td>' . $row['idno'] . '</td>';
-            echo '<td>' . $row['fname'] . " " . $row['lname'] .'</td>';
-            echo '<td>' . $row['department'] . '</td>';
-            echo '<td>' . $row['position'] . '</td>';
-            echo '<td>' . $row['faculty_stat'] . '</td>';
-            echo '<td>';
-            if ($row['faculty_stat'] === 'Active') {
-                echo '<a href="fchange.php?id=' . $row['idno'] . '" class="link-primary"><i class="fa fa-toggle-on fs-5"></i></a>';
-            } else {
-                echo '<a href="fchange.php?id=' . $row['idno'] . '" class="link-primary"><i class="fa fa-toggle-off fs-5"></i></a>';
+            while ($row = $result->fetch_assoc()) {
+                echo '<tr>';
+                echo '<td>' . $row['idno'] . '</td>';
+                echo '<td>' . $row['fname'] . " " . $row['lname'] . '</td>';
+                echo '<td>' . $row['department'] . '</td>';
+                echo '<td>' . $row['position'] . '</td>';
+                echo '<td>' . $row['faculty_stat'] . '</td>';
+                echo '<td>';
+                // Toggle Active/Inactive status
+                if ($row['faculty_stat'] === 'Active') {
+                    echo '<a href="fchange.php?id=' . $row['idno'] . '" class="link-primary"><i class="fa fa-toggle-on fs-5"></i></a>';
+                } else {
+                    echo '<a href="fchange.php?id=' . $row['idno'] . '" class="link-primary"><i class="fa fa-toggle-off fs-5"></i></a>';
+                }
+                // View details button
+                echo '<i style="margin-left: 10px; color: #0a58ca;" class="fa-solid fa-eye view-faculty-details" data-id="' . $row['idno'] . '"></i>';
+                // Edit button - Redirects to edit_faculty.php
+                echo '<a href="edit_faculty.php?id=' . $row['idno'] . '" class="link-primary" style="margin-left: 10px;">
+                        <i class="fa fa-edit fs-5"></i>
+                      </a>';
+                echo '</td>';
+                echo '</tr>';
             }
-            echo '<i style="margin-left: 10px; color: #0a58ca;" class="fa-solid fa-eye view-faculty-details" data-id="' . $row['idno'] . '"></i>';
-            echo '</td>';
-            echo '</tr>';
-        }
-
         echo '
             </tbody>
         </table>

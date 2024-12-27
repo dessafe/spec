@@ -1,0 +1,64 @@
+database name : laboratory
+
+table: administ
+email - varchar(50) - PK
+fname - varchar(40)
+mname - varchar(40)
+lname - varchar(40)
+sex - varchar(10)
+passw - varchar(30)
+
+table: faculty
+idno - varchar(50) PK
+fname - varchar(40)
+mname - varchar(40)
+lname - varchar(40)
+sex - varchar(6)
+addrs - varchar(100)
+cpno - varchar(11)
+department - varchar(30)
+position - varchar(30)
+faculty_stat - varchar(20)
+email - varchar(50)
+passw - varchar(30)
+
+table: laboratory
+labID - int (50) auto_Inc - PK
+labname - varchar(20)
+labLoc - varchar(50)
+
+table: lab_images
+imageID - INT AUTO_INCREMENT PK
+labID - INT(50) laboratory table CASCADE - FK
+imagePath - VARCHAR(255)
+uploadDate - DATE
+
+table: hardwares
+deviceID - int (50) auto_Inc - PK
+name - varchar(65)
+brand - varchar (100)
+sponsorName - varchar(100)
+category - varchar (100)
+serialNo - varchar (100) 
+doAcquisition - date
+status - varchar(20)
+idno - varchar(50) FK faculty table ON CASCADE
+labId - int (50) - PK ON CASCADE
+
+table: hardware_images
+imageID INT AUTO_INCREMENT PRIMARY KEY
+deviceID INT(50) hardware table - FK CASCADE
+imagePath VARCHAR(255)
+uploadDate DATE
+
+table: hardware_transfer_history
+transferID - int(11) auto_Inc - PK
+deviceID - int(50) hardware table - FK
+fromLabID - int (50) lab table - FK
+toLabID - int (50) lab table - FK
+transferDate - date
+adminEmail - varchar(50) administ table - FK
+remarks - text
+fromFaculty - varchar(50) - FK
+toFaculty - varchar(50) - FK
+
