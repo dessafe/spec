@@ -16,7 +16,7 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
     $status = mysqli_real_escape_string($link, $_POST['status']);
     $idno = $_SESSION['QR']; 
     $labID = mysqli_real_escape_string($link, $_POST['labID']);
-    
+
     // Check if the provided labID exists in the laboratory table
     $lab_query = "SELECT * FROM `laboratory` WHERE `labID` = '$labID'";
     $lab_result = mysqli_query($link, $lab_query);
@@ -29,6 +29,14 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
         if (mysqli_num_rows($device_result) > 0) {
             $errorMessage = "The device already exists in the database.";
         } else {
+            // If "Other" option for brand or category is selected, use custom values
+            if ($brand === 'Other') {
+                $brand = mysqli_real_escape_string($link, $_POST['brandOther']);
+            }
+            if ($category === 'Other') {
+                $category = mysqli_real_escape_string($link, $_POST['categoryOther']);
+            }
+
             // Insert the hardware record
             $sql = "INSERT INTO `hardwares`(`name`, `brand`, `sponsorName`, `category`, `serialNo`, `doAcquisition`, `status`, `idno`, `labID`) 
                     VALUES ('$name', '$brand', '$sponsorName', '$category', '$serialNo', '$doAcquisition', '$status', '$idno', '$labID')";
@@ -69,7 +77,6 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
             }
         }
     }
-
 }
 
 ?>
@@ -141,15 +148,17 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="brand" class="form-label">Brand</label>
-                            <input list="brand-options" class="form-control" id="brand" name="brand" required>
-                            <datalist id="brand-options">
-                                <option value="Acer">
-                                <option value="Apple">
-                                <option value="Dell">
-                                <option value="HP">
-                                <option value="Lenovo">
-                                <option value="Samsung">
-                            </datalist>
+                            <select class="form-control" id="brand" name="brand" required>
+                                <option value="" disabled selected>Select a brand</option>
+                                <option value="Acer">Acer</option>
+                                <option value="Apple">Apple</option>
+                                <option value="Dell">Dell</option>
+                                <option value="HP">HP</option>
+                                <option value="Lenovo">Lenovo</option>
+                                <option value="Samsung">Samsung</option>
+                                <option value="Other">Other (type below)</option>
+                            </select>
+                            <input type="text" id="brand-other" class="form-control mt-2" name="brandOther" placeholder="Enter custom brand" style="display:none;" />
                         </div>
                     </div>
                     <div class="row">
@@ -159,19 +168,21 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="category" class="form-label">Category</label>
-                            <input list="category-options" class="form-control" id="category" name="category" required>
-                            <datalist id="category-options">
-                                <option value="Aircon">
-                                <option value="External Hard Drive">
-                                <option value="Keyboard">
-                                <option value="Monitor">
-                                <option value="Mouse">
-                                <option value="Printer">
-                                <option value="Projector">
-                                <option value="RAM">
-                                <option value="System Unit">
-                                <option value="UPS">
-                            </datalist>
+                            <select class="form-control" id="category" name="category" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Aircon">Aircon</option>
+                                <option value="External Hard Drive">External Hard Drive</option>
+                                <option value="Keyboard">Keyboard</option>
+                                <option value="Monitor">Monitor</option>
+                                <option value="Mouse">Mouse</option>
+                                <option value="Printer">Printer</option>
+                                <option value="Projector">Projector</option>
+                                <option value="RAM">RAM</option>
+                                <option value="System Unit">System Unit</option>
+                                <option value="UPS">UPS</option>
+                                <option value="Other">Other (type below)</option>
+                            </select>
+                            <input type="text" id="category-other" class="form-control mt-2" name="categoryOther" placeholder="Enter custom category" style="display:none;" />
                         </div>
                     </div>
                     <div class="row">
@@ -190,31 +201,30 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
                             <select class="form-control" id="status" name="status" required>
                                 <option value="" disabled selected>--Select--</option>
                                 <option value="For Disposal">For Disposal</option>
-                                <option value="Need Repair">Need Repair</option>
+                                <option value="Need Repair/Cleaning">Need Repair/Cleaning</option>
                                 <option value="Working">Working</option>
                                 <option value="Not Working">Not Working</option>
                             </select>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="labID" class="form-label">Lab ID</label>
-                            <select class="form-control" id="labID" name="labID" required>
-                                <option value="" disabled selected>--Select--</option>
-                                <?php
-                                // Fetch lab names and IDs from the laboratory table
-                                $lab_query = "SELECT `labID`, `labName` FROM `laboratory`";
-                                $lab_result = mysqli_query($link, $lab_query);
-
-                                // Check if there are labs available
-                                if (mysqli_num_rows($lab_result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($lab_result)) {
-                                        // The 'value' attribute is the labID, the displayed text is labName
-                                        echo "<option value='" . $row['labID'] . "'>" . $row['labName'] . "</option>";
-                                    }
-                                } else {
-                                    echo "<option value=''>No labs available</option>";
+                            <?php
+                            $idno = $_SESSION['QR'];
+                            $lab_query = "SELECT `labID`, `labName` FROM `laboratory` WHERE `idno` = '$idno'";
+                            $lab_result = mysqli_query($link, $lab_query);
+                            if (mysqli_num_rows($lab_result) > 0) {
+                                echo "<select class='form-control' id='labID' name='labID' required>";
+                                echo "<option value='' disabled selected>-- Select a Lab --</option>";
+                                while ($row = mysqli_fetch_assoc($lab_result)) {
+                                    $labID = $row['labID'];
+                                    $labName = $row['labName'];
+                                    echo "<option value='$labID'>$labName</option>";
                                 }
-                                ?>
-                            </select>
+                                echo "</select>";
+                            } else {
+                                echo "<input type='text' class='form-control' value='No labs available' disabled>";
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="row">
@@ -231,32 +241,29 @@ if (isset($_POST['add']) && $_POST['name'] != "") {
                         </div>
                     </div>
 
-                    <button type="submit" name="add">Add Hardware</button>
+                    <button type="submit" name="add" class="btn btn-primary">Add Hardware</button>
                 </form>
 
-                <?php if ($successMessage != ""): ?>
-                    <script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: '<?php echo $successMessage; ?>',
-                        }).then(function() {
-                            window.location.reload();
-                        });
-                    </script>
-                <?php endif; ?>
-
-                <?php if ($errorMessage != ""): ?>
-                    <script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: '<?php echo $errorMessage; ?>',
-                        });
-                    </script>
-                <?php endif; ?>
+                <?php
+                if ($successMessage != "") {
+                    echo "<script>Swal.fire('Success', '$successMessage', 'success');</script>";
+                }
+                if ($errorMessage != "") {
+                    echo "<script>Swal.fire('Error', '$errorMessage', 'error');</script>";
+                }
+                ?>
             </div>
         </main>
     </section>
+
+    <script>
+        // Toggle visibility of custom brand and category inputs
+        document.getElementById('brand').addEventListener('change', function() {
+            document.getElementById('brand-other').style.display = (this.value === 'Other') ? 'block' : 'none';
+        });
+        document.getElementById('category').addEventListener('change', function() {
+            document.getElementById('category-other').style.display = (this.value === 'Other') ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>

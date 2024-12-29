@@ -8,8 +8,8 @@ $sql = "SELECT
     (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR') AS totalHardware,
     (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Working') AS totalWorking,
     (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Not Working') AS totalNotWorking,
-    (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Disposal') AS totalDisposal,
-    (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Repair') AS totalRepair";
+    (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'For Disposal') AS totalDisposal,
+    (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Need Repair/Cleaning') AS totalRepair"; // Updated status
 
 $result = $link->query($sql);
 $row = $result->fetch_assoc();
@@ -19,8 +19,9 @@ $totalNotWorking = $row['totalNotWorking'];
 $totalDisposal = $row['totalDisposal'];
 $totalRepair = $row['totalRepair'];
 
-echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalWorking, Not Working: $totalNotWorking, Disposal: $totalDisposal, Repair: $totalRepair');</script>";
+echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalWorking, Not Working: $totalNotWorking, Disposal: $totalDisposal, Repair/Cleaning: $totalRepair');</script>";
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +84,7 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
                     ['Working', <?php echo $totalWorking; ?>, '#4caf50'],   // Green
                     ['Not Working', <?php echo $totalNotWorking; ?>, '#f44336'], // Red
                     ['Disposal', <?php echo $totalDisposal; ?>, '#ffc107'],   // Yellow
-                    ['Repair', <?php echo $totalRepair; ?>, '#2196f3']    // Blue
+                    ['Need Repair/Cleaning', <?php echo $totalRepair; ?>, '#2196f3']    // Blue
                 ]);
 
                 // Chart options for Bar Chart
@@ -105,7 +106,7 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
                         0: { color: '#4caf50' },  // Working -> Green
                         1: { color: '#f44336' },  // Not Working -> Red
                         2: { color: '#ffc107' },  // Disposal -> Yellow
-                        3: { color: '#2196f3' }   // Repair -> Blue
+                        3: { color: '#2196f3' }   // Need Repair -> Blue
                     },
                     colors: ['#4caf50', '#f44336', '#ffc107', '#2196f3'], // Ensure the colors match with the series
                     legend: { position: 'top' },  // Adjust legend position
@@ -117,6 +118,7 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
                 chart.draw(data, options);
             }
         });
+
     </script>
 </head>
 <body>
@@ -143,8 +145,8 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
                 <li><i class='bx bxs-bar-chart-alt-2'></i><span class="text"><h3><?php echo $totalHardware; ?></h3><p>Total Hardware</p></span></li>
                 <li><i class='bx bxs-check-circle'></i><span class="text"><h3><?php echo $totalWorking; ?></h3><p>Working</p></span></li>
                 <li><i class='bx bxs-x-circle'></i><span class="text"><h3><?php echo $totalNotWorking; ?></h3><p>Not Working</p></span></li>
-                <li><i class='bx bxs-trash'></i><span class="text"><h3><?php echo $totalDisposal; ?></h3><p>Disposal</p></span></li>
-                <li><i class='bx bxs-wrench'></i><span class="text"><h3><?php echo $totalRepair; ?></h3><p>Repair</p></span></li>
+                <li><i class='bx bxs-trash'></i><span class="text"><h3><?php echo $totalDisposal; ?></h3><p>For Disposal</p></span></li>
+                <li><i class='bx bxs-wrench'></i><span class="text"><h3><?php echo $totalRepair; ?></h3><p>Need Repair/Cleaning</p></span></li>
             </ul>
 
             <div class="chart-container">
