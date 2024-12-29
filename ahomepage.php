@@ -1,6 +1,7 @@
 <?php
     session_start();
     include "db_connection.php";
+    
 
     // Fetch total faculties count
     $facultyCountQuery = "SELECT COUNT(*) as totalFaculties FROM faculty";
@@ -104,6 +105,19 @@
                     <span class="text">Laboratories</span>
                 </a>
             </li>
+            <!-- New Hardware link -->
+            <li>
+                <a href="ahardware.php">
+                    <i class='bx bx-wrench'></i>
+                    <span class="text">Hardware</span>
+                </a>
+            </li>
+            <li>
+                <a href="transferHistory.php">
+                    <i class='bx bx-wrench'></i>
+                    <span class="text">Transfer History</span>
+                </a>
+            </li>
             <li>
                 <a href="logz.php">
                     <i class='bx bxs-time'></i>
@@ -120,7 +134,6 @@
             </li>
         </ul>
     </section>
-    <!-- SIDEBAR -->
 
     <!-- CONTENT -->
     <section id="content">
@@ -140,6 +153,7 @@
                 <div class="right">
                     <a href="add_faculty.php" class="btn btn-primary">Add Faculty</a>
                     <a href="add_laboratory.php" class="btn btn-primary">Add Laboratory</a>
+                    <a href="transfer.php" class="btn btn-primary">Transfer</a>
                 </div>
             </div>
 

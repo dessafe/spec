@@ -159,6 +159,18 @@ $(document).ready(function() {
 					<span class="text">Laboratories</span>
 				</a>
 			</li>
+            <li>
+                <a href="ahardware.php">
+                    <i class='bx bx-wrench'></i>
+                    <span class="text">Hardware</span>
+                </a>
+            </li>
+            <li>
+                <a href="transferHistory.php">
+                    <i class='bx bx-wrench'></i>
+                    <span class="text">Transfer History</span>
+                </a>
+            </li>
 			<li>
 				<a href="logz.php">
 					<i class='bx bxs-time'></i>
