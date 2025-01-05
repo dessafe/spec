@@ -13,6 +13,25 @@
     <title>SpecSnap</title>
     <link rel="icon" href="assets/img/logo1.png">
   </head>
+  <style>
+    .btn.solid {
+    width: 50%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.btn.solid:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Optional: Adds a subtle zoom effect */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+  </style>
   <body>
   <?php
 session_start();
