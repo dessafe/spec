@@ -276,12 +276,6 @@ $(document).ready(function() {
                                         echo '<td>' . (isset($row['labID']) ? $row['labID'] : '') . '</td>';
                                         // Action links
                                         echo '<td>';
-                                        if ($row['status'] === 'Working') {
-                                            echo '<a href="lchange.php?id=' . $row['deviceID'] . '" class="link-primary"><i class="fa fa-toggle-on fs-5"></i></a>';
-                                        } else {
-                                            echo '<a href="lchange.php?id=' . $row['deviceID'] . '" class="link-primary"><i class="fa fa-toggle-off fs-5"></i></a>';
-                                        }
-                                        echo '&nbsp;&nbsp;';
                                         echo '<a href="#" class="link-dark qr-link" data-bs-toggle="modal" data-bs-target="#qrModal" data-deviceid="'. $row['deviceID'] . '" data-name="' . urlencode($row['name']) . '" data-doacquisition="' . urlencode($row['doAcquisition']) . '" data-status="' . urlencode($row['status']) . '" data-labid="' . urlencode($row['labID']) . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
                                         echo '&nbsp;&nbsp;'; echo '&nbsp;&nbsp;';
                                         echo '<a href="javascript:void(0);" class="link-danger delete-link" data-deviceid="' . $row['deviceID'] . '" data-labid="' . $row['labID'] . '"><i class="fa fa-trash" aria-hidden="true"></i></a>';
