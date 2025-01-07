@@ -347,6 +347,9 @@
                     <span class="text">Hardware</span>
                 </a>
             </li>
+            <li><a href="inventory.php"><i class='bx bxs-box'></i>
+            <span class="text">Inventory</span></a>
+            </li>
         </ul>
         <ul class="side-menu">
             <li>

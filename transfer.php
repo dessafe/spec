@@ -143,11 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="">Choose a lab</option>
                     <?php while ($row = mysqli_fetch_assoc($labResult)) : ?>
                         <option value="<?php echo $row['labID']; ?>"><?php echo $row['labname']; ?></option>
-                <label for="deviceID" class="form-label">Select Hardware</label>
-                <select id="deviceID" name="deviceID" class="form-select" required onchange="getLabAndFaculty(this.value)">
-                    <option value="">Choose a device</option>
-                    <?php while ($row = mysqli_fetch_assoc($hardwareResult)) : ?>
-                        <option value="<?php echo $row['deviceID']; ?>"><?php echo $row['name']; ?><?php echo $row['deviceID']; ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
@@ -163,6 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="deviceID" class="form-label">Select Hardware</label>
                 <select id="deviceID" name="deviceID" class="form-select" required>
                     <option value="">Choose a device</option>
+                    <?php while ($row = mysqli_fetch_assoc($hardwareResult)) : ?>
+                        <option value="<?php echo $row['deviceID']; ?>"><?php echo $row['name']; ?> <?php echo $row['deviceID']; ?></option>
+                    <?php endwhile; ?>
                 </select>
             </div>
 

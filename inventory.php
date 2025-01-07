@@ -2,18 +2,27 @@
 session_start();
 include "db_connection.php";
 
-// Fetch the hardware inventory details
+$faculty_idno = $_SESSION["QR"]; 
+// Query to get count of devices based on category, status, and brands, grouped by labId and category
 $sqlInventory = "
     SELECT 
-        name AS hardwareName,
-        brand,
-        category,
-        COUNT(CASE WHEN status = 'Working' THEN 1 END) AS totalWorking,
-        COUNT(CASE WHEN status = 'Not Working' THEN 1 END) AS totalNotWorking,
-        COUNT(CASE WHEN status = 'For Disposal' THEN 1 END) AS totalDisposal,
-        COUNT(CASE WHEN status = 'Need Repair/Cleaning' THEN 1 END) AS totalRepair
-    FROM hardwares
-    GROUP BY name, brand, category
+        h.labId, 
+        l.labname, 
+        h.category, 
+        GROUP_CONCAT(DISTINCT h.brand ORDER BY h.brand ASC) AS brands, 
+        COUNT(*) AS totalCount, 
+        SUM(CASE WHEN h.status = 'Need Repair/Cleaning' THEN 1 ELSE 0 END) AS forRepair,
+        SUM(CASE WHEN h.status = 'Working' THEN 1 ELSE 0 END) AS working,
+        SUM(CASE WHEN h.status = 'Not Working' THEN 1 ELSE 0 END) AS notWorking,
+        SUM(CASE WHEN h.status = 'For Disposal' THEN 1 ELSE 0 END) AS forDisposal
+    FROM 
+        hardwares h
+    LEFT JOIN 
+        laboratory l ON h.labId = l.labId
+    WHERE 
+        l.idno = '$faculty_idno'  -- Filter by faculty id
+    GROUP BY 
+        h.labId, h.category
 ";
 
 $resultInventory = $link->query($sqlInventory);
@@ -62,7 +71,7 @@ $resultInventory = $link->query($sqlInventory);
     <section id="sidebar">
         <a href="#" class="brand"><i class='bx bx-qr'></i><span class="text">SpecSnap</span></a>
         <ul class="side-menu top">
-            <li><a href="dashboard.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
+            <li><a href="faculty.php"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
             <li><a href="hview.php"><i class='bx bxs-book-content'></i><span class="text">Hardware</span></a></li>
             <li class="active"><a href="inventory.php"><i class='bx bxs-box'></i><span class="text">Inventory</span></a></li>
         </ul>
@@ -79,38 +88,48 @@ $resultInventory = $link->query($sqlInventory);
         <main>
             <div class="inventory-container">
                 <h1 class="text-center">Hardware Inventory</h1>
-                <table class="inventory-table">
-                    <thead>
-                        <tr>
-                            <th>Hardware</th>
-                            <th>Brand</th>
-                            <th>Category</th>
-                            <th>Working</th>
-                            <th>Not Working</th>
-                            <th>For Disposal</th>
-                            <th>Need Repair/Cleaning</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if ($resultInventory && $resultInventory->num_rows > 0) {
-                            while ($row = $resultInventory->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['hardwareName'], ENT_QUOTES, 'UTF-8') . "</td>";
-                                echo "<td>" . htmlspecialchars($row['brand'], ENT_QUOTES, 'UTF-8') . "</td>";
-                                echo "<td>" . htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8') . "</td>";
-                                echo "<td>" . (int)$row['totalWorking'] . "</td>";
-                                echo "<td>" . (int)$row['totalNotWorking'] . "</td>";
-                                echo "<td>" . (int)$row['totalDisposal'] . "</td>";
-                                echo "<td>" . (int)$row['totalRepair'] . "</td>";
-                                echo "</tr>";
+                <?php
+                if ($resultInventory && $resultInventory->num_rows > 0) {
+                    $currentLabId = null;
+                    while ($row = $resultInventory->fetch_assoc()) {
+                        // Start a new table if the lab changes
+                        if ($row['labId'] != $currentLabId) {
+                            if ($currentLabId !== null) {
+                                echo "</tbody></table><br>";  // Close the previous table
                             }
-                        } else {
-                            echo "<tr><td colspan='7'>No hardware inventory available.</td></tr>";
+                            $currentLabId = $row['labId'];
+                            echo "<table class='inventory-table'>
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Brands</th>
+                                        <th>Total Devices</th>
+                                        <th>Working</th>
+                                        <th>Not Working</th>
+                                        <th>For Disposal</th>
+                                        <th>Need Repair/Cleaning</th>
+                                    </tr>
+                                </thead>
+                                <tbody>";
                         }
-                        ?>
-                    </tbody>
-                </table>
+
+                        // Display the data for the current category within the lab
+                        echo "<tr>";
+                        echo "<td>" . htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['brands'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . (int)$row['totalCount'] . "</td>";
+                        echo "<td>" . (int)$row['working'] . "</td>";
+                        echo "<td>" . (int)$row['notWorking'] . "</td>";
+                        echo "<td>" . (int)$row['forDisposal'] . "</td>";
+                        echo "<td>" . (int)$row['forRepair'] . "</td>";
+                        echo "</tr>";
+                    }
+
+                    echo "</tbody></table>";
+                } else {
+                    echo "<p>No hardware inventory available for the labs you manage.</p>";
+                }
+                ?>
             </div>
         </main>
     </section>
