@@ -13,7 +13,7 @@ $selectedLabLoc = '';
 if (isset($_POST['labID'])) {
     $labID = $_POST['labID'];
     // Fetch hardware details for the selected lab
-    $query = "SELECT hardwares.deviceID, hardwares.name, hardwares.labID, hardwares.doAcquisition, hardwares.category, hardwares.status, faculty.fname, faculty.lname 
+    $query = "SELECT hardwares.deviceID, hardwares.name, hardwares.labID, hardwares.doAcquisition, hardwares.category, hardwares.brand, hardwares.status, faculty.fname, faculty.lname 
                 FROM hardwares 
                 INNER JOIN faculty ON hardwares.idno = faculty.idno 
                 WHERE `labID` = '$labID'";
@@ -28,7 +28,7 @@ if (isset($_POST['labID'])) {
     $selectedLabLoc = isset($lab['labLoc']) ? $lab['labLoc'] : '';
 } else {
     // Default query to fetch all hardware details if no lab is selected
-    $query = "SELECT hardwares.deviceID, hardwares.name, hardwares.labID, hardwares.doAcquisition, hardwares.category, hardwares.status, faculty.fname, faculty.lname 
+    $query = "SELECT hardwares.deviceID, hardwares.name, hardwares.labID, hardwares.doAcquisition, hardwares.category, hardwares.brand, hardwares.status, faculty.fname, faculty.lname 
                 FROM hardwares 
                 INNER JOIN faculty ON hardwares.idno = faculty.idno";
     $result = mysqli_query($link, $query);
@@ -252,6 +252,7 @@ $(document).ready(function() {
                                 <th>Name</th>
                                 <th>Date of Acquisition</th>
                                 <th>Category</th>
+                                <th>Brand</th>
                                 <th>Faculty Administrator</th>
                                 <th>Status</th>
                                 <th>Lab ID</th>
@@ -271,6 +272,7 @@ $(document).ready(function() {
                                         echo '<td>' . (isset($row['name']) ? $row['name'] : '') . '</td>';
                                         echo '<td>' . (isset($row['doAcquisition']) ? $row['doAcquisition'] : '') . '</td>';
                                         echo '<td>' . (isset($row['category']) ? $row['category'] : '') . '</td>';
+                                        echo '<td>' . (isset($row['brand']) ? $row['brand'] : '') . '</td>';
                                         echo '<td>' . (isset($row['fname']) ? $row['fname'] : '') . ' ' . (isset($row['lname']) ? $row['lname'] : '') . '</td>';
                                         echo '<td>' . (isset($row['status']) ? $row['status'] : '') . '</td>';
                                         echo '<td>' . (isset($row['labID']) ? $row['labID'] : '') . '</td>';
