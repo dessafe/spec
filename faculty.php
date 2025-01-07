@@ -4,6 +4,17 @@ include "db_connection.php";
 
 // Fetch hardware analytics from the database
 $QR = $_SESSION['QR'];
+
+// Fetch the lab name for the user
+$labName = '';
+$sqlLab = "SELECT labname FROM `laboratory` WHERE idno = '$QR' LIMIT 1";
+$resultLab = $link->query($sqlLab);
+
+if ($resultLab && $resultLab->num_rows > 0) {
+    $labRow = $resultLab->fetch_assoc();
+    $labName = $labRow['labname'];
+}
+
 $sql = "SELECT 
     (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR') AS totalHardware,
     (SELECT COUNT(*) FROM `hardwares` WHERE idno = '$QR' AND status = 'Working') AS totalWorking,
@@ -21,7 +32,6 @@ $totalRepair = $row['totalRepair'];
 
 echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalWorking, Not Working: $totalNotWorking, Disposal: $totalDisposal, Repair/Cleaning: $totalRepair');</script>";
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,11 +132,12 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
     </script>
 </head>
 <body>
-    <section id="sidebar">
+<section id="sidebar">
         <a href="#" class="brand"><i class='bx bx-qr'></i><span class="text">SpecSnap</span></a>
         <ul class="side-menu top">
             <li class="active"><a href="#"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
             <li><a href="hview.php"><i class='bx bxs-book-content'></i><span class="text">Hardware</span></a></li>
+            <li><a href="inventory.php"><i class='bx bxs-box'></i><span class="text">Inventory</span></a></li>
         </ul>
         <ul class="side-menu">
             <li><a href="logout.php" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
@@ -137,7 +148,9 @@ echo "<script>console.log('Debug Values: Total: $totalHardware, Working: $totalW
         <nav><i class='bx bx-menu'></i><a href="#" class="nav-link">Faculty | <?php echo $_SESSION["user"]; ?></a></nav>
         <main>
             <div class="head-title">
-                <div class="left"><h1>Dashboard</h1></div>
+                <div class="left">
+                    <h1>Dashboard - <?php echo htmlspecialchars($labName, ENT_QUOTES, 'UTF-8'); ?></h1>
+                </div>
                 <a href="add_hardware.php" class="btn-download" style="border: none;"><i class='bx bx-plus'></i><span class="text">Add Hardware</span></a>
             </div>
 

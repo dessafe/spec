@@ -16,7 +16,7 @@
 
     // Apply search filter if provided
     if ($search) {
-        $sql .= " AND (h.deviceID LIKE '%$search%' OR h.name LIKE '%$search%' OR h.doAcquisition LIKE '%$search%' OR h.status LIKE '%$search%' OR h.labID LIKE '%$search%')";
+        $sql .= " AND (h.deviceID LIKE '%$search%' OR h.name LIKE '%$search%' OR h.category LIKE '%$search%' OR h.brand LIKE '%$search%' OR h.doAcquisition LIKE '%$search%' OR h.status LIKE '%$search%' OR h.labID LIKE '%$search%')";
     }
 
     // Correct fetching of result rows
@@ -29,6 +29,8 @@
             $hardwareData[$deviceID] = [
                 'deviceID' => $row['deviceID'],
                 'name' => $row['name'],
+                'brand' => $row['brand'], // Added Brand
+                'category' => $row['category'], // Added Category
                 'doAcquisition' => $row['doAcquisition'],
                 'status' => $row['status'],
                 'labID' => $row['labID'],
@@ -41,6 +43,7 @@
         }
     }
 ?>
+
 
 <!-- HTML FRONTEND (Displaying Hardware List) -->
 
@@ -378,72 +381,42 @@
                             <table id="example" class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Device Id</th>
+                                        <th>Device ID</th>
                                         <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
                                         <th>Date of Acquisition</th>
                                         <th>Status</th>
-                                        <th>LabId</th>
-                                        <th>View Images</th>
-                                        <th>QR Code</th>
-                                        <th>Actions</th> <!-- New Actions Column -->
+                                        <th>Lab ID</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
-                    foreach ($hardwareData as $deviceID => $device) {
-                        $imageUrl = !empty($device['images']) ? $device['images'][0] : 'assets/img/default-image.jpg';
-                        echo '<tr>';
-                        echo '<td>' . $device['deviceID'] . '</td>';
-                        echo '<td>' . $device['name'] . '</td>';
-                        echo '<td>' . $device['doAcquisition'] . '</td>';
-
-                        // Dropdown for status
-                        echo '<td>';
-                        echo '<select class="form-select status-dropdown" data-deviceid="' . $device['deviceID'] . '">';
-                        $statusOptions = ['Working', 'Not Working', 'For Disposal', 'Need Repair/Cleaning'];
-                        foreach ($statusOptions as $option) {
-                            $selected = $device['status'] === $option ? 'selected' : '';
-                            echo "<option value='$option' $selected>$option</option>";
-                        }
-                        echo '</select>';
-                        echo '</td>';
-
-                        // Fetch the lab name based on the labID from the laboratory table
-                        $lab_query = "SELECT `labName` FROM `laboratory` WHERE `labID` = '" . $device['labID'] . "'";
-                        $lab_result = mysqli_query($link, $lab_query);
-
-                        // Check if the lab exists and get the lab name
-                        $labName = "";
-                        if (mysqli_num_rows($lab_result) > 0) {
-                            $lab_data = mysqli_fetch_assoc($lab_result);
-                            $labName = $lab_data['labName'];
-                        } else {
-                            $labName = "Lab not found"; // If labID doesn't exist in laboratory table
-                        }
-
-                        // Display the lab name instead of labID in the table
-                        echo '<td>' . $labName . '</td>';
-
-
-                        // View images link
-                        echo '<td><a href="#" class="view-images-link" data-deviceid="' . $device['deviceID'] . '"><i class="fa fa-eye"></i> View Images</a></td>';
-
-                        // QR code link
-                        echo '<td><a href="#" class="link-dark qr-link" data-deviceid="' . $device['deviceID'] . '" data-name="' . urlencode($device['name']) . '" data-doacquisition="' . urlencode($device['doAcquisition']) . '" data-status="' . urlencode($device['status']) . '" data-labid="' . urlencode($device['labID']) . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a></td>';
-
-                        // Actions column with Edit and Delete icons
-                        echo '<td>
-                            <a href="view_hardwares.php?deviceID=' . $device['deviceID'] . '" class="view-btn"><i class="fa fa-eye"></i></a> | 
-                            <a href="#" class="edit-btn" data-deviceid="' . $device['deviceID'] . '"><i class="fa fa-edit"></i></a> | 
-                            <a href="#" class="delete-btn" data-deviceid="' . $device['deviceID'] . '"><i class="fa fa-trash"></i></a>
-                        </td>';
-
-                        echo '</tr>';
+                    
+                    foreach ($hardwareData as $device) {
+                        echo "<tr>
+                                <td>{$device['deviceID']}</td>
+                                <td>{$device['name']}</td>
+                                <td>{$device['category']}</td>
+                                <td>{$device['brand']}</td>
+                                <td>{$device['doAcquisition']}</td>
+                                <td>{$device['status']}</td>
+                                <td>{$device['labID']}</td>
+                                <td>
+                                    <button class='btn btn-primary edit-btn' data-deviceid='{$device['deviceID']}'>Edit</button>
+                                    <button class='btn btn-danger delete-btn' data-deviceid='{$device['deviceID']}'>Delete</button>
+                                </td>
+                            </tr>";
                     }
-                    echo '</tbody></table></div>';
+
+                    echo '    </tbody>
+                            </table>
+                          </div>';
                 } else {
-                    echo "<p>No hardware records found.</p>";
+                    echo '<p>No hardware found.</p>';
                 }
             ?>
+
 
         </main>
     </section>

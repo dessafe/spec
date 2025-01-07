@@ -31,6 +31,8 @@
     transform: scale(1.05); /* Optional: Adds a subtle zoom effect */
     transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
 }
+
+
   </style>
   <body>
   <?php
@@ -133,37 +135,35 @@ if (isset($_POST['login'])) {
 }
 ?>
 
-<div class="container">
-  <div class="forms-container">
-    <div class="signin-signup">
-      <form action="" class="sign-in-form" method="post">
-        <h2 class="title">Sign in</h2>
-        <div class="input-field">
-          <i class="fas fa-user"></i>
-          <input type="text" placeholder="Email Address" name="email" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" />
-        </div>
-        <div class="input-field">
-          <i class="fas fa-lock"></i>
-          <input type="password" placeholder="Password" name="password" />
-        </div>
-        <button type="submit" name="login" class="btn solid"> Login</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="panels-container">
-    <div class="panel left-panel">
-      <div class="content">
-        <a href="index.php"><img src="assets/img/logo1.png" alt="" class="logo"></a>
-        <h4>Welcome to SpecSnap!</h4>
-        <p>
-          Effortlessly manage hardware specifications with our intuitive system. Scan, access, and track vital information instantly with QR codes linked to our comprehensive database.
-        </p>
+ <div class="container">
+      <div class="signin-signup">
+        <form action="" class="sign-in-form" method="post">
+          <h2 class="title">Sign in</h2>
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" placeholder="Email Address" name="email" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"> </i>
+            <input type="password" placeholder="Password" name="password" />
+          </div>
+          <button type="submit" name="login" class="btn solid"> Login</button>
+        </form>
       </div>
-      <img src="assets/img/device.svg" class="image" alt="" />
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <a href="index.php"><img src="assets/img/logo1.png" alt="" class="logo"></a>
+            <h4>Welcome to SpecSnap!</h4>
+            <p>
+              Effortlessly manage hardware specifications with our intuitive system. Scan, access, and track vital information instantly with QR codes linked to our comprehensive database.
+            </p>
+          </div>
+          <img src="assets/img/device.svg" class="image" alt="" />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
   </body>
 </html>

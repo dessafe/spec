@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select id="deviceID" name="deviceID" class="form-select" required onchange="getLabAndFaculty(this.value)">
                     <option value="">Choose a device</option>
                     <?php while ($row = mysqli_fetch_assoc($hardwareResult)) : ?>
-                        <option value="<?php echo $row['deviceID']; ?>"><?php echo $row['name']; ?></option>
+                        <option value="<?php echo $row['deviceID']; ?>"><?php echo $row['name']; ?><?php echo $row['deviceID']; ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
