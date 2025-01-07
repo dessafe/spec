@@ -108,27 +108,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         function getLabDetails(labID) {
-        if (labID) {
-            $.ajax({
-                type: "POST",
-                url: "fetch_lab_details.php", 
-                data: { labID: labID },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data) {
-                        $('#fromFaculty').val(data.facultyName);
+            if (labID) {
+                $.ajax({
+                    type: "POST",
+                    url: "fetch_lab_details.php", 
+                    data: { labID: labID },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data) {
+                            $('#fromFaculty').val(data.facultyName);
 
-                        var deviceSelect = $('#deviceID');
-                        deviceSelect.empty();
-                        deviceSelect.append('<option value="">Choose a device</option>');
-                        data.devices.forEach(function(device) {
-                            deviceSelect.append('<option value="' + device.deviceID + '">' + device.name + '</option>');
-                        });
+                            var deviceSelect = $('#deviceID');
+                            deviceSelect.empty();
+                            deviceSelect.append('<option value="">Choose a device</option>');
+                            data.devices.forEach(function(device) {
+                                deviceSelect.append('<option value="' + device.deviceID + '">' + device.name + '</option>');
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
-    }
     </script>
 </head>
 <body style="background-color: #f8f9fa;">
