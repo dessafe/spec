@@ -92,37 +92,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Fetch laboratory and faculty details based on selected hardware
-        function getLabAndFaculty(deviceID) {
+
+        function getFacultyByLab(labID) {
             $.ajax({
                 type: "POST",
-                url: "fetch_lab_faculty.php",  // Create this PHP file to handle the AJAX request
-                data: { deviceID: deviceID },
+                url: "fetch_faculty.php", 
+                data: { labID: labID },
                 success: function(response) {
                     var data = JSON.parse(response);
                     if (data) {
-                        // Populate fromLabName, fromFaculty with data and disable them
-                        $('#fromLabID').val(data.fromLabName).prop('disabled', true);  // Lab Name
-                        $('#fromFaculty').val(data.fromFaculty).prop('disabled', true);  // Faculty Name
+                        $('#toFaculty').val(data.toFaculty); 
                     }
                 }
             });
         }
 
-        function getFacultyByLab(labID) {
+        function getLabDetails(labID) {
+        if (labID) {
             $.ajax({
                 type: "POST",
-                url: "fetch_faculty.php", // PHP file na maghahanap ng faculty details
+                url: "fetch_lab_details.php", 
                 data: { labID: labID },
                 success: function(response) {
                     var data = JSON.parse(response);
                     if (data) {
-                        // I-populate ang toFaculty field
-                        $('#toFaculty').val(data.toFaculty); // Faculty Name
+                        $('#fromFaculty').val(data.facultyName);
+
+                        var deviceSelect = $('#deviceID');
+                        deviceSelect.empty();
+                        deviceSelect.append('<option value="">Choose a device</option>');
+                        data.devices.forEach(function(device) {
+                            deviceSelect.append('<option value="' + device.deviceID + '">' + device.name + '</option>');
+                        });
                     }
                 }
             });
         }
+    }
     </script>
 </head>
 <body style="background-color: #f8f9fa;">
@@ -130,27 +136,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h2>Transfer Hardware</h2>
         <form method="POST" action="transfer.php">
             
-            <!-- Select hardware -->
+            <!-- Select Lab -->
             <div class="mb-3">
-                <label for="deviceID" class="form-label">Select Hardware</label>
-                <select id="deviceID" name="deviceID" class="form-select" required onchange="getLabAndFaculty(this.value)">
-                    <option value="">Choose a device</option>
-                    <?php while ($row = mysqli_fetch_assoc($hardwareResult)) : ?>
-                        <option value="<?php echo $row['deviceID']; ?>"><?php echo $row['name']; ?></option>
+                <label for="fromLabID" class="form-label">Select Lab</label>
+                <select id="fromLabID" name="fromLabID" class="form-select" required onchange="getLabDetails(this.value)">
+                    <option value="">Choose a lab</option>
+                    <?php while ($row = mysqli_fetch_assoc($labResult)) : ?>
+                        <option value="<?php echo $row['labID']; ?>"><?php echo $row['labname']; ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
 
-            <!-- Select from lab (Populated based on selected device) -->
-            <div class="mb-3">
-                <label for="fromLabID" class="form-label">From Lab</label>
-                <input type="text" id="fromLabID" name="fromLabID" class="form-control" readonly>
-            </div>
-
-            <!-- Select from faculty (Populated based on selected device) -->
+            <!-- Select Faculty (Populated based on selected lab) -->
             <div class="mb-3">
                 <label for="fromFaculty" class="form-label">From Faculty</label>
                 <input type="text" id="fromFaculty" name="fromFaculty" class="form-control" readonly>
+            </div>
+
+            <!-- Select Hardware (Populated based on selected lab) -->
+            <div class="mb-3">
+                <label for="deviceID" class="form-label">Select Hardware</label>
+                <select id="deviceID" name="deviceID" class="form-select" required>
+                    <option value="">Choose a device</option>
+                </select>
             </div>
 
             <!-- Select to lab -->
