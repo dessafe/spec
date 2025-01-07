@@ -119,6 +119,12 @@
                 </a>
             </li>
             <li>
+                <a href="ainventory.php">
+                    <i class='bx bx-wrench'></i>
+                    <span class="text">Inventory</span>
+                </a>
+            </li>
+            <li>
                 <a href="logz.php">
                     <i class='bx bxs-time'></i>
                     <span class="text">Login History</span>
